@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build out a Dinner Menu using JavaScript</title>
+</head>
+<body>
+
+</body>
+<script>
+
+  const currentTime = new Date().getHours();
+
+  const mainMenu = [
+    { dish: 'Organic Jidori Chicken Breast', ingredients: ['two split chicken breasts', 'lemon arugula', 'parmesan quinoa risotto', 'olive oil'], price: 12.95 },
+    { dish: 'Grilled Salmon With Dill Sauce', ingredients: ['salmon fillet', 'mayonnaise', 'fresh dill', 'brown sugar', 'olive oil'], price: 16.50 },
+    { dish: 'BBQ Ribs', ingredients: ['roasted pork ribs', 'spicy bbq sauce', 'mashed potatoes', 'colewslaw'], price: 18.00 },
+    { dish: 'Huevos Rancheros', ingredients: ['two fried eggs', 'black beans on tortillas', 'guacamole', 'fresh salsa', 'sour cream'], price: 11.95 },
+    { dish: 'Carpaccio of Beef', ingredients: ['marinated raw fillet', 'olive oil', 'balsamic vinegar', 'parmesan cheese'], price: 13.95 }
+  ];
+
+  const sidesMenu = [
+    { dish: 'Chinese Chicken Salad', ingredients: ['spring mix', 'lettuce', 'carrots', 'cranberry', 'slivered almonds', 'chicken'], price: 9.95 },
+    { dish: 'Crispy Pepper Calamari', ingredients: ['stir-fried squid', 'jalapeno', 'red onion', 'green onion', 'salt & pepper'], price: 10.95 },
+    { dish: 'Heirloom Tomato Salad', ingredients: ['arugula', 'shaft blue cheese', 'beef bacon', 'balsamic vinaigrette'], price: 11.95 },
+    { dish: 'Chilli Beef Nachos', ingredients: ['tortilla chips', 'beef mince', 'chilli seasoning', 'guacamole', 'cheddar sauce'], price: 11.50 },
+    { dish: 'Tapas for Two', ingredients: ['chicken goujons', 'onion rings', 'garlic bread', 'black pudding', 'chorizo croquette'], price: 12.95 }
+  ];
+
+  const breakfastMenu = [
+    { dish: 'Damn Fine Cherry Pie', description: 'classic double-crust cherry pie with fresh cherries and a scoop of vanilla ice cream', price: 5.95 },
+    { dish: 'French Omelette and Sausage', description: 'soft, tender omelette of freshest eggs with pork sausage', price: 6.50 },
+    { dish: 'Muesli Yogurt', description: '0% fat Greek yogurt, banana, sliced berries and honey', price: 7.50 },
+    { dish: 'Andalusian Breakfast', description: 'sliced iberico ham on rustic bread with tomato and olive oil', price: 7.95 },
+    { dish: 'Banana and Pecan Pancakes', description: 'fluffy pancakes with mashed banana, maple syrup and extra pecans', price: 7.25 }
+  ];
+
+  commentRandomizer = (choiceOne, choiceTwo, choiceThree) => {
+    let comments = [
+      "Very good choice!",
+      "I'm sure you'll love it.",
+      "It's a great day to eat out.",
+      "I hope you like the recipe.",
+      "You'll definitely want to repeat after tasting it."
+    ];
+    // TODO: Dishes comparator function to push new and specific comments in array
+    return console.log(`\n*:;;;;;;:* ${comments[Math.floor(Math.random() * comments.length)]} *:;;;;;;:*`);
+  }
+
+  function matchFinder(choice, menu, total) {
+    let match = false;
+    let price = total;
+    Loop1:
+    while (match !== true) {
+      for (let plate in menu) {
+        if (choice === menu[plate].dish.toLowerCase()) {
+          match = true;
+          price += menu[plate].price;
+          break Loop1;
+        }
+      }
+      choice = prompt(`Please type the exact name of a menu dish:`).toLowerCase();
+    }
+    return [choice, price];
+  }
+
+  function menuChooser(meal) {
+    let total = 0;
+    if (meal === 'lunch') {
+      mainMenu.forEach(plate => {
+      plate.price = Number((plate.price * 0.90).toFixed(2));
+      })
+      sidesMenu.forEach(plate => {
+      plate.price = Number((plate.price * 0.90).toFixed(2));
+      })
+    }
+    console.log(`Welcome to Bottega Dinner. This is our ${meal} Main Menu:\n`);
+    mainMenu.forEach(key => {
+      console.log(`${key.dish} ..... (${key.ingredients}) ..... $${key.price}`);
+    })
+    let choiceOne = prompt(`\nWhat dish would you like to have from our Main Menu selection?:`).toLowerCase();
+    [choiceOne, total] = matchFinder(choiceOne, mainMenu, total);
+    commentRandomizer(choiceOne);
+    console.log(`\nThis is our ${meal} Sides Menu:\n`);
+    sidesMenu.forEach(key => {
+      console.log(`${key.dish} ..... (${key.ingredients}) ..... $${key.price}`);
+    })
+    let choiceTwo = prompt("\nWhat's the first dish you'd like to have from our Sides Menu?:").toLowerCase();
+    [choiceTwo, total] = matchFinder(choiceTwo, sidesMenu, total);
+    commentRandomizer(choiceOne, choiceTwo);
+    let choiceThree = prompt("\nAnd what would be the second dish you'd like to have from our Sides Menu?:").toLowerCase();
+    [choiceThree, total] = matchFinder(choiceThree, sidesMenu, total);
+    commentRandomizer(choiceOne, choiceTwo, choiceThree);
+
+    return console.log(`\nYou've ordered ${choiceOne}, ${choiceTwo} and ${choiceThree} for a total of $${total.toFixed(2)}. Thank you!`); 
+  }
+
+  function breakfastChooser(meal) {
+    let total = 0;
+    console.log(`Welcome to Bottega Dinner. This is our ${meal} selection:\n`);
+    breakfastMenu.forEach(key => {
+      console.log(`${key.dish} ..... ${key.description} ..... $${key.price}`);
+    })
+    let choice = prompt(`\nWhat would you like to have for breakfast?:`).toLowerCase();
+    [choice, total] = matchFinder(choice, breakfastMenu, total);
+    return `You've ordered a ${choice} for a total of $${total}. Thank you!;`
+  }
+
+  if (10 <= currentTime && currentTime < 12) {
+    breakfastChooser('breakfast');
+  } else if (12 <= currentTime && currentTime < 17) {
+    menuChooser('lunch');
+  } else if (17 <= currentTime && currentTime < 23) {
+    menuChooser('dinner');
+  } else {
+    console.log("I'm sorry, we're closed. Please come back from 10 am to 11 pm.");
+  }
+
+</script>
+</html>
